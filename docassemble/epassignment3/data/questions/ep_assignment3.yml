@@ -1,0 +1,52 @@
+---
+modules:
+  - docassemble.base.core
+  - docassemble.base.util
+---
+objects:
+  - user: Individual
+  - family: DAList.using(object_type=Individual, ask_number=True)
+---
+question:  |
+  What is your name?
+fields: 
+  - First Name: user.name.first
+  - Last Name: user.name.last
+---
+question:  |
+  Hello, ${ user.name.first } ${ user.name.last }. 
+  
+  Do you have any family members?
+yesno: family.there_is_another
+---
+question: How many family members do you have? 
+fields:
+  - number: family.target_number
+    datatype: number
+    min: 0
+---  
+question: Information about the ${ ordinal(i) } family member.
+fields:
+  - First Name: family[i].name.first
+  - Last Name: family[i].name.last
+---
+question: Is your household income more than $20,000 per year?
+yesno: household_income_high
+---
+question: Is your household income more than $20,000 per year?
+noyes: household_income_low
+---
+question: Thank you, ${ user }.
+subquestion:  |
+  Here is your document.
+attachment: 
+  name: Legal Aid Services Application
+  filename: Legal_Aid_Application
+  docx template file: legal_aid_template.docx
+  valid formats:
+    - pdf
+    - docx
+buttons:
+  - Exit: exit
+mandatory: true
+---
